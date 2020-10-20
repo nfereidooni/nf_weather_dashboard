@@ -1,4 +1,137 @@
+// https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=15e99efa461ece787c60292850024b69
+// api.openweathermap.org/data/2.5/weather?q={cityname}&appid={API key}
+// http://api.openweathermap.org/data/2.5/uvi?lat={lat}&lon={lon}&appid={API key}
 
+// standard ajax call
+// unit 6 - activity 3
+
+async function weatherLookup(name) {
+    if (localStorage.getItem("historyID") == undefined) {
+        localStorage.setItem("historyID", 0)
+    }
+    
+    let historyID = localStorage.getItem("historyID");
+
+    let key = '15e99efa461ece787c60292850024b69'
+    let cityName = (name == undefined ? $("#cityName").val() : name)
+    // let weatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${key}`)
+
+    
+    // .then(function(resp) {
+    //     return resp.json() 
+    // })
+    // // .then(async function(resp) {
+    // //     let uvData = await fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=43.7&lon=-79.42&appid=15e99efa461ece787c60292850024b69`)
+    // // })
+    // .catch(function() {
+    // });
+    let todaysDate = new Date().toLocaleDateString()
+    $('#cityNameDate').append(`${cityName.charAt(0).toUpperCase() + cityName.slice(1)} (${todaysDate})`)
+
+    // Weather API AJAX Call
+
+    let weatherDataURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${key}`;
+    let longitude;
+    let latitude;
+    
+    $.when($.ajax({
+        url: weatherDataURL,
+        type: 'GET',
+        success: function(data){
+          return data;
+        }
+      })).done(function(data){
+        longitude = data.coord.lon;
+        latitude = data.coord.lat;
+
+        let temperaturediv = $('#temperature')
+        temperaturediv.append(`Temperature: ${Math.round(parseInt(data.main.temp) - 273.15)} °C`)
+    
+        let humiditydiv = $('#humidity')
+        humiditydiv.append(`Humidity: ${data.main.humidity}%`)
+    
+        let windSpeeddiv = $('#windSpeed')
+        windSpeeddiv.append(`Wind Speed: ${data.wind.speed} meters/sec`)
+        weatherDataURL = `http://api.openweathermap.org/data/2.5/uvi?lat=${latitude}&lon=${longitude}&appid=${key}`;
+        $.when($.ajax({ 
+            url: weatherDataURL,
+            type: "GET",
+            success: function(data){
+              return data;
+            }
+        })).done(function(uvdata){
+          let uvIndexdiv = $('#uvIndex')
+          uvIndexdiv.append(`UV Index: ${uvdata.value}`)
+        })
+      });
+
+// 5 Day Forecast API Call
+
+    weatherDataURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}`;
+    
+    $.when($.ajax({
+        url: weatherDataURL,
+        type: 'GET',
+        success: function(data){
+          return data;
+        }
+      })).done(function(data){
+    
+        console.log(data)
+
+        let dayOne = data.list[4].main
+        let dayTwo = data.list[12].main
+        let dayThree = data.list[20].main
+        let dayFour = data.list[28].main
+        let dayFive = data.list[36].main
+
+        let temp = dayOne.temp
+
+        console.log(data)
+
+
+
+        // for loop
+
+        // let humiditydiv = $('#humidity')
+        // humiditydiv.append(`Humidity: ${data.main.humidity}%`)
+    });
+
+// Local Storage
+
+
+    localStorage.setItem(historyID, cityName)
+
+    historyID++
+    localStorage.setItem("historyID", historyID)
+
+    $('#searchHistory').empty()
+    for (let i=0; i < historyID; i++) {
+        cityName = localStorage.getItem(i)
+        $('#searchHistory').append(`<tr id="row${i+1}"> <td href="javascript: weatherLookup(${cityName})">` + cityName + `</td></tr>`)
+    }
+
+
+}
+
+// Retrieve/Display Event Function
+  
+function displayHistory() {
+    let historyID = localStorage.getItem("historyID");
+    for (let i=0; i < historyID; i++){
+        let cityName = localStorage.getItem(i)  
+        $('#searchHistory').append(`<tr id="row${i+1}"> <td href="javascript: weatherLookup(${cityName})">` + cityName + `</td></tr>`)
+    }
+  }
+
+displayHistory()
+
+// Clear History Function
+
+function clearHistory() {
+    localStorage.clear();
+    $('#searchHistory').empty();
+}
 
 // Open Weather API
 // Local Storage
@@ -8,7 +141,7 @@
 // - Pulls weather information from API
 // - Adds city searched to history
 // - Displays City Name and Today's Date
-// - Displays today's Temperature, Humidity, Wind Speed and UV Index
+// - Displays today's Temperature (main.temp), Humidity(main.humidity), Wind Speed(wind.speed) and UV Index (coordinates - value)
 // - Populates 5 day weather forecast with dates, icon representing weather, temperature and humidity
 
 

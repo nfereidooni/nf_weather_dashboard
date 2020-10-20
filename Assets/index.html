@@ -27,6 +27,98 @@
 </head>
 <body>
 
+<!-- Navbar -->
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand mb-1 w-100 text-center">Weather Dashboard</span>
+  </nav>
+
+<!-- Search Form -->
+
+  <div class="container">
+      <div class="row">
+          <div class="col-4">
+              <h4><b>Search for a city</b></h4>
+              <div class="input-group mb-3">
+                  <input type="text" id="cityName" class="form-control" placeholder="e.g. Toronto">
+                  <div class="input-group-append">
+                      <button class="btn btn-primary" id="searchBtn" type="button" onclick="weatherLookup()"><i class="fas fa-search"></i></button>
+                  </div>
+              </div>
+
+<!-- Clear History -->
+                <button class="btn btn-primary btn-small" id="searchBtn" type="button" onclick="clearHistory()">Clear History</button>
+
+<!-- Search Result History -->
+              <h5>Search History</h5>
+              <table id="searchHistory" class="border-dark"></table>
+          </div>
+
+<!-- Search Results -->
+          <div class="col-8">
+              <div class="row mr-0">
+
+            <!-- Today's Search Results -->
+                  <div class="col-12 border border-lg m-3 rounded">
+
+                <!-- City Name and Date -->
+                      <div class="row">
+                          <div class="col-12">
+                              <h3 id="cityNameDate" class="text-center"></h3>
+                          </div>
+                      </div>
+
+                <!-- Temperature -->
+                      <div class="row">
+                          <div class="col-12">
+                              <p id="temperature"></p>
+                          </div>
+                      </div>
+
+                <!-- Humidity -->
+                      <div class="row">
+                          <div class="col-12">
+                              <p id="humidity"></p>
+                          </div>
+                      </div>
+
+                <!-- Wind Speed -->
+                      <div class="row">
+                          <div class="col-12">
+                              <p id="windSpeed"></p>
+                          </div>
+                      </div>
+
+                <!-- UV Index -->
+                      <div class="row">
+                          <div class="col-12 d-flex">
+                              <p id="uvIndex"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+            <!-- 5 Day Forecast -->
+              <div class="row">
+                  <div class="col-12">
+                      <h3>5-Day Forecast</h3>
+                  </div>
+              </div>
+
+                 <!-- Forecast Cards -->  
+              <div class="row">
+                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>                
+              </div>
+
+          </div>
+      </div>
+  </div>
+
     <!-- Weather Dashboard Nav
 
     Left Column - Form Search for City
@@ -38,7 +130,15 @@
     Temperature, Humidity, Wind Speed, UV Index
     5 day Forecast - 5 cards -->
 
+    <!-- <h3>Search for a City</h3>
+    <form>
+      <input type="text" id="cityName"/>
+      <button class="btn btn-info btn-small searchBtn" id="searchBtn" onclick="weatherLookup()" type="button">Search</button>
+    </form>
 
+    <h5>Search History</h5>
+    <table id="searchHistory"> 
+    </table> -->
 
 <script src="main.js"></script>    
 </body>
