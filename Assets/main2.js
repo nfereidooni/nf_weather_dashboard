@@ -60,27 +60,38 @@ function getForecastdata() {
     }).then(function (response) {
         console.log(response)
 
-        let day1 = response.list[4].main
-        let day2 = response.list[12].main
-        let day3 = response.list[20].main
-        let day4 = response.list[28].main
-        let day5 = response.list[36].main
+        let day1 = response.list[4]
+        let day2 = response.list[12]
+        let day3 = response.list[20]
+        let day4 = response.list[28]
+        let day5 = response.list[36]
 
-        let forecastdiv = $('forecastCards')
-        
+        let forecastdiv = $('forecast')
+
+        temp1 = day1.temp
+        humidity1 = day1.humidity
+        console.log(temp1)
+        console.log(humidity1)
+
+
         for (let i = 0; i < 5; i++) {
-            day = "day" + (i+1)
-            console.log(day)
-            temperature = String(day.temp)
+            let date = moment().add(1 + i, 'days').format('L')
+            // console.log(date)
+            let icon = `day${i+1}.weather.0.icon`
+            console.log(icon)
+            let temperature = `day${i+1}.main.temp`
             console.log(temperature)
-        
+            // console.log(day1.temp)
+            let humidity = `day${i+1}.main.humidity`
+            console.log(humidity)
+            // console.log(day1.humidity)
 
             forecastdiv.append(`
             <div class="card col-2 forecastCard">
                 <div class="card-body">
-                    <h5 class="card-title" id="forecastDate">${forcastDate}</h5>
+                    <h5 class="card-title" id="forecastDate">${date}</h5>
                     <img src="http://openweathermap.org/img/wn/${icon}@2x.png" />
-                    <p class="card-text forcast">Temperature: ${temp}°C</p>
+                    <p class="card-text forcast">Temperature: ${temperature}°C</p>
                     <p class="card-text forcast">Humidity: ${humidity}%</p>
                 </div>
             </div>`)  
