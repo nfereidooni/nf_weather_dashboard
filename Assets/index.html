@@ -43,7 +43,7 @@
               <div class="input-group mb-3">
                   <input type="text" id="cityName" class="form-control" placeholder="e.g. Toronto">
                   <div class="input-group-append">
-                      <button class="btn btn-primary" id="searchBtn" type="button" onclick="weatherLookup()"><i class="fas fa-search"></i></button>
+                      <button class="btn btn-primary" id="searchBtn" type="button"><i class="fas fa-search"></i></button>
                   </div>
               </div>
 
@@ -107,13 +107,17 @@
               </div>
 
                  <!-- Forecast Cards -->  
-              <div class="row">
-                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                  <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>                
-              </div>
+
+                            <!-- Forcast cards Container -->
+                    <div class="row" id="forecastCards">
+                    </div>
+              <!-- <div class="row">
+                  <div id="day-1" class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div id="day-2"class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div id="day-3" class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div id="day-4" class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                  <div id="day-5" class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>                
+              </div> -->
 
           </div>
       </div>
@@ -140,6 +144,6 @@
     <table id="searchHistory"> 
     </table> -->
 
-<script src="main.js"></script>    
+<script src="main2.js"></script>    
 </body>
 </html>

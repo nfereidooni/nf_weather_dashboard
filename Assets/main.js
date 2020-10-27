@@ -6,11 +6,18 @@
 // unit 6 - activity 3
 
 async function weatherLookup(name) {
-    if (localStorage.getItem("historyID") == undefined) {
-        localStorage.setItem("historyID", 0)
-    }
+
+    $("#cityNameDate").empty();
+    $("#temperature").empty();
+    $("#humidity").empty();
+    $("#windSpeed").empty();
+    $("#uvIndex").empty();
+
+    // if (localStorage.getItem("historyID") == undefined) {
+    //     localStorage.setItem("historyID", 0)
+    // }
     
-    let historyID = localStorage.getItem("historyID");
+    // let historyID = localStorage.getItem("historyID");
 
     let key = '15e99efa461ece787c60292850024b69'
     let cityName = (name == undefined ? $("#cityName").val() : name)
@@ -100,16 +107,22 @@ async function weatherLookup(name) {
 // Local Storage
 
 
-    localStorage.setItem(historyID, cityName)
+    // localStorage.setItem(historyID, cityName)
 
-    historyID++
-    localStorage.setItem("historyID", historyID)
+    // historyID++
+    // localStorage.setItem("historyID", historyID)
 
-    $('#searchHistory').empty()
-    for (let i=0; i < historyID; i++) {
-        cityName = localStorage.getItem(i)
-        $('#searchHistory').append(`<tr id="row${i+1}"> <td href="javascript: weatherLookup(${cityName})">` + cityName + `</td></tr>`)
-    }
+    // $('#searchHistory').empty()
+    // for (let i=0; i < historyID; i++) {
+        
+    //     cityName = localStorage.getItem(i)
+    //     $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
+        
+    //     document.getElementById(`row${i+1}`).addEventListener("click", setCityName);        
+    //     document.getElementById(`row${i+1}`).addEventListener("click", weatherLookup);
+      
+        
+    // }
 
 
 }
@@ -120,7 +133,7 @@ function displayHistory() {
     let historyID = localStorage.getItem("historyID");
     for (let i=0; i < historyID; i++){
         let cityName = localStorage.getItem(i)  
-        $('#searchHistory').append(`<tr id="row${i+1}"> <td href="javascript: weatherLookup(${cityName})">` + cityName + `</td></tr>`)
+        $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
     }
   }
 
@@ -132,6 +145,17 @@ function clearHistory() {
     localStorage.clear();
     $('#searchHistory').empty();
 }
+
+
+// Set City Name
+
+// function setCityName() {
+//   //grab the correct row that was clicked
+//   //set cityName to whatever the cityName in the td is
+//     var rowId = $(this).attr("id")
+//     cityName = $(this).siblings
+// }
+
 
 // Open Weather API
 // Local Storage
