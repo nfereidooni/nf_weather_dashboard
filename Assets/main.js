@@ -13,11 +13,11 @@ async function weatherLookup(name) {
     $("#windSpeed").empty();
     $("#uvIndex").empty();
 
-    // if (localStorage.getItem("historyID") == undefined) {
-    //     localStorage.setItem("historyID", 0)
-    // }
+    if (localStorage.getItem("historyID") == undefined) {
+        localStorage.setItem("historyID", 0)
+    }
     
-    // let historyID = localStorage.getItem("historyID");
+    let historyID = localStorage.getItem("historyID");
 
     let key = '15e99efa461ece787c60292850024b69'
     let cityName = (name == undefined ? $("#cityName").val() : name)

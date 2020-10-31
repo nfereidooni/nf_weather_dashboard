@@ -1,6 +1,7 @@
 // Weather API Key
 
 const key = '15e99efa461ece787c60292850024b69'
+citySaved = []
 
 // 
 
@@ -12,7 +13,23 @@ document.getElementById("searchBtn").addEventListener("click", function () {
         url: weatherURL,
         method: "GET"
     }).then(function (response) {
-        console.log(response)
+        // console.log(response)
+  
+        $("#cityNameDate").empty();
+        $("#temperature").empty();
+        $("#humidity").empty();
+        $("#windSpeed").empty();
+        $("#uvIndex").empty();
+        $("#forecast").empty();
+
+        // if (localStorage.getItem("historyID") == undefined) {
+        //     localStorage.setItem("historyID", 0)
+        // }
+        
+        // let historyID = localStorage.getItem("historyID");
+
+        let todaysDate = new Date().toLocaleDateString()
+        $('#cityNameDate').append(`${cityName.charAt(0).toUpperCase() + cityName.slice(1)} (${todaysDate})`)
 
         longitude = response.coord.lon;
         latitude = response.coord.lat;
@@ -20,6 +37,8 @@ document.getElementById("searchBtn").addEventListener("click", function () {
         getUVdata()
 
         getForecastdata()
+
+        // saveHistory()
 
         let temperaturediv = $('#temperature')
         temperaturediv.append(`Temperature: ${Math.round(parseInt(response.main.temp) - 273.15)} °C`)
@@ -29,13 +48,10 @@ document.getElementById("searchBtn").addEventListener("click", function () {
 
         let windSpeeddiv = $('#windSpeed')
         windSpeeddiv.append(`Wind Speed: ${response.wind.speed} meters/sec`)
-
     });
-
-
-
 });
 
+// UV API Call
 
 function getUVdata() {
     var uvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + key;
@@ -43,16 +59,18 @@ function getUVdata() {
         url: uvURL,
         method: "GET"
     }).then(function (response) {
-        console.log(response)
+        // console.log(response)
 
         let uvIndexdiv = $('#uvIndex')
         uvIndexdiv.append(`UV Index: ${response.value}`)
     });
 }
 
+// Forecast API Call
+
 function getForecastdata() {
     const cityName = $("#cityName").val()
-    console.log(cityName)
+    // console.log(cityName)
     var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + key;
     $.ajax({
         url: forecastURL,
@@ -66,33 +84,27 @@ function getForecastdata() {
         let day4 = response.list[28]
         let day5 = response.list[36]
 
-        let forecastdiv = $('forecast')
+        const forecastArray = [day1, day2, day3, day4, day5];
 
-        temp1 = day1.temp
-        humidity1 = day1.humidity
-        console.log(temp1)
-        console.log(humidity1)
+        let forecastdiv = $('#forecast')
 
-
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < forecastArray.length; i++) {
             let date = moment().add(1 + i, 'days').format('L')
             // console.log(date)
-            let icon = `day${i+1}.weather.0.icon`
+            let icon = forecastArray[i].weather[0].icon
             console.log(icon)
-            let temperature = `day${i+1}.main.temp`
+            let temperature = forecastArray[i].main.temp
             console.log(temperature)
-            // console.log(day1.temp)
-            let humidity = `day${i+1}.main.humidity`
+            let humidity = forecastArray[i].main.humidity
             console.log(humidity)
-            // console.log(day1.humidity)
 
             forecastdiv.append(`
-            <div class="card col-2 forecastCard">
+            <div class="card col forecastCard">
                 <div class="card-body">
                     <h5 class="card-title" id="forecastDate">${date}</h5>
                     <img src="http://openweathermap.org/img/wn/${icon}@2x.png" />
-                    <p class="card-text forcast">Temperature: ${temperature}°C</p>
-                    <p class="card-text forcast">Humidity: ${humidity}%</p>
+                    <p class="card-text forecast">Temperature: ${temperature}°C</p>
+                    <p class="card-text forecast">Humidity: ${humidity}%</p>
                 </div>
             </div>`)  
         }
@@ -100,3 +112,44 @@ function getForecastdata() {
 
     });
 }
+
+
+
+
+// function saveHistory() {
+
+//     let historyID = 0
+//     localStorage.setItem(historyID, cityName)
+//     historyID++
+
+//     $('#searchHistory').empty()
+
+//     for (let i=0; i < historyID; i++) {
+        
+//         cityName = localStorage.getItem(i)
+//         $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
+        
+//         document.getElementById(`row${i+1}`).addEventListener("click", setCityName);        
+//         document.getElementById(`row${i+1}`).addEventListener("click", weatherLookup);6
+//     }
+// }
+
+// function displayHistory() {
+//     let historyID = localStorage.getItem("historyID");
+//     for (let i=0; i < historyID; i++){
+//         let cityName = localStorage.getItem(i)  
+//         $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
+//     }
+//   }
+
+// displayHistory()
+
+// // Clear History Function
+
+// function clearHistory() {
+//     localStorage.clear();
+//     $('#searchHistory').empty();
+// }
+
+
+
