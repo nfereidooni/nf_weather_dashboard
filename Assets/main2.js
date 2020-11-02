@@ -3,9 +3,13 @@
 const key = '15e99efa461ece787c60292850024b69'
 citySaved = []
 
-// 
+// Main Function
 
 document.getElementById("searchBtn").addEventListener("click", function () {
+    weatherLookup()
+});
+
+function weatherLookup() {
     const cityName = $("#cityName").val()
 
     var weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + key;
@@ -14,7 +18,7 @@ document.getElementById("searchBtn").addEventListener("click", function () {
         method: "GET"
     }).then(function (response) {
         // console.log(response)
-  
+
         $("#cityNameDate").empty();
         $("#temperature").empty();
         $("#humidity").empty();
@@ -22,11 +26,7 @@ document.getElementById("searchBtn").addEventListener("click", function () {
         $("#uvIndex").empty();
         $("#forecast").empty();
 
-        // if (localStorage.getItem("historyID") == undefined) {
-        //     localStorage.setItem("historyID", 0)
-        // }
-        
-        // let historyID = localStorage.getItem("historyID");
+        saveHistory(cityName)
 
         let todaysDate = new Date().toLocaleDateString()
         $('#cityNameDate').append(`${cityName.charAt(0).toUpperCase() + cityName.slice(1)} (${todaysDate})`)
@@ -38,8 +38,6 @@ document.getElementById("searchBtn").addEventListener("click", function () {
 
         getForecastdata()
 
-        // saveHistory()
-
         let temperaturediv = $('#temperature')
         temperaturediv.append(`Temperature: ${Math.round(parseInt(response.main.temp) - 273.15)} °C`)
 
@@ -49,7 +47,7 @@ document.getElementById("searchBtn").addEventListener("click", function () {
         let windSpeeddiv = $('#windSpeed')
         windSpeeddiv.append(`Wind Speed: ${response.wind.speed} meters/sec`)
     });
-});
+};
 
 // UV API Call
 
@@ -106,50 +104,60 @@ function getForecastdata() {
                     <p class="card-text forecast">Temperature: ${temperature}°C</p>
                     <p class="card-text forecast">Humidity: ${humidity}%</p>
                 </div>
-            </div>`)  
+            </div>`)
         }
 
 
     });
 }
 
+function saveHistory(cityName) {
+    let historyID = 0;
 
+    if (localStorage.getItem("historyID") == undefined) {
+        localStorage.setItem("historyID", 0)
+    }
+    else {
+        historyID = localStorage.getItem("historyID");
+        ++historyID
+    }
 
+    localStorage.setItem(historyID, cityName)
+    localStorage.setItem("historyID", historyID)
 
-// function saveHistory() {
+    $('#searchHistory').empty()
 
-//     let historyID = 0
-//     localStorage.setItem(historyID, cityName)
-//     historyID++
+    for (let i = 0; i <= historyID; i++) {
 
-//     $('#searchHistory').empty()
+        let city = localStorage.getItem(i)
+        $('#searchHistory').append(`<tr><td><button id="row${i + 1}" class="btn btn-sm btn-dark">` + city + `</button></td></tr>`)
 
-//     for (let i=0; i < historyID; i++) {
-        
-//         cityName = localStorage.getItem(i)
-//         $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
-        
-//         document.getElementById(`row${i+1}`).addEventListener("click", setCityName);        
-//         document.getElementById(`row${i+1}`).addEventListener("click", weatherLookup);6
-//     }
-// }
+        // Set City Name
 
-// function displayHistory() {
-//     let historyID = localStorage.getItem("historyID");
-//     for (let i=0; i < historyID; i++){
-//         let cityName = localStorage.getItem(i)  
-//         $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
-//     }
-//   }
+        document.getElementById(`row${i + 1}`).addEventListener("click", function () {
+            $("#cityName").val(city)
+            weatherLookup()
+        });
+    //     document.getElementById(`row${i + 1}`).addEventListener("click", weatherLookup);
+    }
+}
 
-// displayHistory()
+function displayHistory() {
+    let historyID = localStorage.getItem("historyID");
+    for (let i = 0; i < historyID; i++) {
+        let cityName = localStorage.getItem(i)
+        $('#searchHistory').append(`<tr><td><button id="row${i + 1}" class="btn btn-sm btn-dark">` + cityName + `</button></td></tr>`)
+    }
+}
 
-// // Clear History Function
+displayHistory()
 
-// function clearHistory() {
-//     localStorage.clear();
-//     $('#searchHistory').empty();
-// }
+// Clear History Function
+
+function clearHistory() {
+    localStorage.clear();
+    $('#searchHistory').empty();
+}
 
 
 

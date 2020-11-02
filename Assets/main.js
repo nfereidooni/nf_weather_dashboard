@@ -107,22 +107,22 @@ async function weatherLookup(name) {
 // Local Storage
 
 
-    // localStorage.setItem(historyID, cityName)
+    localStorage.setItem(historyID, cityName)
 
-    // historyID++
-    // localStorage.setItem("historyID", historyID)
+    historyID++
+    localStorage.setItem("historyID", historyID)
 
-    // $('#searchHistory').empty()
-    // for (let i=0; i < historyID; i++) {
+    $('#searchHistory').empty()
+    for (let i=0; i < historyID; i++) {
         
-    //     cityName = localStorage.getItem(i)
-    //     $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
+        cityName = localStorage.getItem(i)
+        $('#searchHistory').append(`<tr id="row${i+1}"> <td>` + cityName + `</td></tr>`)
         
-    //     document.getElementById(`row${i+1}`).addEventListener("click", setCityName);        
-    //     document.getElementById(`row${i+1}`).addEventListener("click", weatherLookup);
+        document.getElementById(`row${i+1}`).addEventListener("click", setCityName);        
+        document.getElementById(`row${i+1}`).addEventListener("click", weatherLookup);
       
         
-    // }
+    }
 
 
 }
