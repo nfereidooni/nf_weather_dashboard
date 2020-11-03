@@ -1,7 +1,6 @@
 // Weather API Key
 
 const key = '15e99efa461ece787c60292850024b69'
-citySaved = []
 
 // Main Function
 
@@ -10,14 +9,20 @@ document.getElementById("searchBtn").addEventListener("click", function () {
 });
 
 function weatherLookup() {
+
+    // Pulls city name from user input
+
     const cityName = $("#cityName").val()
+
+    // First API Call for Main Weather Data (Today's Temperature, Humidity & Wind Speed)
 
     var weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + key;
     $.ajax({
         url: weatherURL,
         method: "GET"
     }).then(function (response) {
-        // console.log(response)
+
+        // Clears Data before appending new weather datga
 
         $("#cityNameDate").empty();
         $("#temperature").empty();
@@ -26,30 +31,42 @@ function weatherLookup() {
         $("#uvIndex").empty();
         $("#forecast").empty();
 
+        // Function to save search history
+
         saveHistory(cityName)
+
+        // Append City Name and Today's Date
 
         let todaysDate = new Date().toLocaleDateString()
         $('#cityNameDate').append(`${cityName.charAt(0).toUpperCase() + cityName.slice(1)} (${todaysDate})`)
 
+        // Pull Longitude and Latitude from first API call to use in UV Data Call
+
         longitude = response.coord.lon;
         latitude = response.coord.lat;
 
+        // Second API Call Function (UV Data)
+
         getUVdata()
+
+        // Third API Call Function (Forecast Data)
 
         getForecastdata()
 
+        // Appends Data from First API Call to main card
+
         let temperaturediv = $('#temperature')
-        temperaturediv.append(`Temperature: ${Math.round(parseInt(response.main.temp) - 273.15)} °C`)
+        temperaturediv.append(`<b>Temperature: </b>${Math.round(parseInt(response.main.temp) - 273.15)} °C`)
 
         let humiditydiv = $('#humidity')
-        humiditydiv.append(`Humidity: ${response.main.humidity}%`)
+        humiditydiv.append(`<b>Humidity: </b>${response.main.humidity}%`)
 
         let windSpeeddiv = $('#windSpeed')
-        windSpeeddiv.append(`Wind Speed: ${response.wind.speed} meters/sec`)
+        windSpeeddiv.append(`<b>Wind Speed: </b>${response.wind.speed} meters/sec`)
     });
 };
 
-// UV API Call
+// Second API Call Function (UV Data)
 
 function getUVdata() {
     var uvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + key;
@@ -57,24 +74,26 @@ function getUVdata() {
         url: uvURL,
         method: "GET"
     }).then(function (response) {
-        // console.log(response)
+
+        // Appends Data from Second API Call to main card
 
         let uvIndexdiv = $('#uvIndex')
-        uvIndexdiv.append(`UV Index: ${response.value}`)
+        uvIndexdiv.append(`<b>UV Index: </b>${response.value}`)
     });
 }
 
-// Forecast API Call
+// Third API Call Function (Forecast Data)
 
 function getForecastdata() {
     const cityName = $("#cityName").val()
-    // console.log(cityName)
     var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + key;
     $.ajax({
         url: forecastURL,
         method: "GET"
     }).then(function (response) {
         console.log(response)
+
+        // Assigning API lists to each future date
 
         let day1 = response.list[4]
         let day2 = response.list[12]
@@ -86,9 +105,10 @@ function getForecastdata() {
 
         let forecastdiv = $('#forecast')
 
+        // Loop through each day to impend data to each forecast card
+
         for (let i = 0; i < forecastArray.length; i++) {
             let date = moment().add(1 + i, 'days').format('L')
-            // console.log(date)
             let icon = forecastArray[i].weather[0].icon
             console.log(icon)
             let temperature = forecastArray[i].main.temp
@@ -99,17 +119,17 @@ function getForecastdata() {
             forecastdiv.append(`
             <div class="card col forecastCard">
                 <div class="card-body">
-                    <h5 class="card-title" id="forecastDate">${date}</h5>
+                    <h5 class="card-title" id="forecastDate"><b>${date}</b></h5>
                     <img src="http://openweathermap.org/img/wn/${icon}@2x.png" />
-                    <p class="card-text forecast">Temperature: ${temperature}°C</p>
-                    <p class="card-text forecast">Humidity: ${humidity}%</p>
+                    <p class="card-text forecast" id="forecastTemp"><b>Temperature: </b>${Math.round(parseInt(temperature) - 273.15)}°C</p>
+                    <p class="card-text forecast" id="forecastHumidity"><b>Humidity: </b>${humidity}%</p>
                 </div>
             </div>`)
         }
-
-
     });
 }
+
+// Function to save search history
 
 function saveHistory(cityName) {
     let historyID = 0;
@@ -132,15 +152,14 @@ function saveHistory(cityName) {
         let city = localStorage.getItem(i)
         $('#searchHistory').append(`<tr><td><button id="row${i + 1}" class="btn btn-sm btn-dark">` + city + `</button></td></tr>`)
 
-        // Set City Name
-
         document.getElementById(`row${i + 1}`).addEventListener("click", function () {
             $("#cityName").val(city)
             weatherLookup()
         });
-    //     document.getElementById(`row${i + 1}`).addEventListener("click", weatherLookup);
     }
 }
+
+// Function to display search history
 
 function displayHistory() {
     let historyID = localStorage.getItem("historyID");

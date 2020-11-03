@@ -1,0 +1,19 @@
+#nav {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#clearBtn {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#forecastDate {
+    font-size: 12px;
+    text-align: center;
+}
+
+#forecastTemp, #forecastHumidity {
+    font-size: 11px;
+    text-align: left;
+}
