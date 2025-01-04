@@ -1,5 +1,7 @@
 # Weather Dashboard
 
+[**Live Deployment**](https://nfereidooni.github.io/nf_weather_dashboard/Assets/index.html)
+
 ## Description 
 
 The goal of this project was to create a weather dashboard using OpenWeather API to retrieve weather data for cities. The app will run in the browser and store recent searches in the local storage.
